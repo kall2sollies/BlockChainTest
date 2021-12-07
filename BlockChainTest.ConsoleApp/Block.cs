@@ -41,15 +41,18 @@ public class Block
         var hashPrefixChallenge = string.Empty.PadLeft(challenge, '0');
         var stopWatch = new Stopwatch();
         stopWatch.Start();
+        long iterations = 0;
         while (true)
         {
             if (Hash.Substring(0, challenge) == hashPrefixChallenge)
             {
                 stopWatch.Stop();
-                Console.WriteLine($"Block {Height} with Hash={Hash} succesfully mined after {_nonce} iterations in {stopWatch.Elapsed.TotalMilliseconds} ms.");
+                Console.WriteLine($"Block {Height} with Hash={Hash} succesfully mined after {iterations} attempts in {stopWatch.Elapsed.TotalMilliseconds} ms.");
                 return;
             }
-            _nonce++;
+
+            iterations++;
+            _nonce = Random.Shared.NextInt64();
             Hash = CreateHash();
         }
     }

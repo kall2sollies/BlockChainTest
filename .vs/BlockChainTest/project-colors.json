@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "d3b8526f-5356-496a-b720-58219d1075ea": {
+      "ProjectGuid": "d3b8526f-5356-496a-b720-58219d1075ea",
+      "DisplayName": "BlockChainTest.ConsoleApp",
+      "ColorIndex": 0
+    },
+    "c21270aa-4904-4e33-9f7c-b19fc1fd02fb": {
+      "ProjectGuid": "c21270aa-4904-4e33-9f7c-b19fc1fd02fb",
+      "DisplayName": "_sln",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
