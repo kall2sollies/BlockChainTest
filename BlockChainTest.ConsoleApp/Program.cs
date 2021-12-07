@@ -4,6 +4,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
+        // test encryption / authentication with https://stackoverflow.com/questions/18485715/how-to-use-public-and-private-key-encryption-technique-in-c-sharp
         // users de la blockchain
         var miner = "miner01@example.com";
         var user1 = "alice@example.com";
