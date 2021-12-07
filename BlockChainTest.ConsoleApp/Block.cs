@@ -9,6 +9,7 @@ public class Block
     public List<Transaction> Transactions { get; set; }
     public string Hash { get; set; }
     public string PreviousHash { get; set; }
+    public int Height { get; set; }
     
     private readonly DateTime _timeStamp;
     private long _nonce;
@@ -17,8 +18,13 @@ public class Block
 
     public bool IsGenesis => PreviousHash == "0";
 
-    public Block(DateTime timeStamp, List<Transaction> transactions, string previousHash = "")
+    public Block(
+        int height,
+        DateTime timeStamp, 
+        List<Transaction> transactions, 
+        string previousHash = "")
     {
+        Height = height;
         _timeStamp = timeStamp;
         _nonce = 0;
         
@@ -40,7 +46,7 @@ public class Block
             if (Hash.Substring(0, challenge) == hashPrefixChallenge)
             {
                 stopWatch.Stop();
-                Console.WriteLine($"Block with Hash={Hash} succesfully mined after {_nonce} iterations in {stopWatch.Elapsed.TotalMilliseconds} ms.");
+                Console.WriteLine($"Block {Height} with Hash={Hash} succesfully mined after {_nonce} iterations in {stopWatch.Elapsed.TotalMilliseconds} ms.");
                 return;
             }
             _nonce++;
@@ -53,7 +59,7 @@ public class Block
         var transactionsString = "";
         Transactions.ForEach(t => transactionsString += t.ToString());
         return _hasher.ComputeHash(
-            $"{PreviousHash}{_timeStamp.Ticks.ToString()}{transactionsString}{_nonce}");
+            $"{Height}{PreviousHash}{_timeStamp.Ticks}{transactionsString}{_nonce}");
     }
 
     /// <summary>Returns a string that represents the current object.</summary>
@@ -61,14 +67,14 @@ public class Block
     public override string ToString()
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"---------------- BLOCK ----------------");
+        sb.AppendLine($"---------------- BLOCK {Height} ----------------");
         sb.AppendLine($"Timestamp:      {_timeStamp}");
         sb.AppendLine($"Hash:           {Hash}");
         sb.AppendLine($"Previous hash:  {PreviousHash}");
         sb.AppendLine($"Nonce:          {_nonce}");
         sb.AppendLine($"Transactions:   {Transactions.Count}");
         foreach (var transaction in Transactions) sb.AppendLine($"                =>  {transaction}");
-        sb.AppendLine($"---------------------------------------");
+        sb.AppendLine($"-----------------------------------------");
         return sb.ToString();
     }
 }

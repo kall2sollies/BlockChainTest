@@ -9,6 +9,7 @@ public class Hasher : IHasher
     {
         using SHA256 hasher = SHA256.Create();
         var bytes = hasher.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-        return Encoding.UTF8.GetString(bytes);
+        var hexString = Convert.ToHexString(bytes);
+        return hexString;
     }
 }

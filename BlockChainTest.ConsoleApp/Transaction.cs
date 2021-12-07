@@ -17,5 +17,5 @@ public class Transaction
 
     /// <summary>Returns a string that represents the current object.</summary>
     /// <returns>A string that represents the current object.</returns>
-    public override string ToString() => $"[{TimeStamp}] {From}\t=>\t{To}\tBTC{Amount:F}";
+    public override string ToString() => $"[{TimeStamp}] {From}\t=>\t{To}\tBTC {Amount:F}";
 }

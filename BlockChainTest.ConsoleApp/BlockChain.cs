@@ -18,13 +18,23 @@ public class BlockChain
         _challenge = challenge;
         _miningReward = miningReward;
         var genesisBlock = new Block(
+            height: 1,
             timeStamp:DateTime.Now,
             transactions: new() { new Transaction(SystemUser, SystemUser, 0m) },
             previousHash:"0");
         Chain = new List<Block> { genesisBlock };
     }
 
-    public void AddTransaction(Transaction transaction) => _pendingTransactions.Add(transaction);
+    public void AddTransaction(Transaction transaction)
+    {
+        var senderBalance = GetBalance(transaction.From);
+        if (transaction.From != SystemUser && senderBalance < transaction.Amount)
+        {
+            Console.WriteLine($"Balance of sender {transaction.From} is BTC {senderBalance:F}. Transaction to {transaction.To} for BTC {transaction.Amount:F} is not valid.");
+            return;
+        }
+        _pendingTransactions.Add(transaction);
+    }
 
     public void MinePendingTransactions(string minerAddress)
     {
@@ -38,6 +48,7 @@ public class BlockChain
 
         // Tentative de minage
         var blockToMine = new Block(
+            Chain.Last().Height + 1,
             timeStamp: DateTime.Now, 
             transactions: _pendingTransactions,
             previousHash: Chain.Last().Hash);
@@ -104,7 +115,7 @@ public class BlockChain
     public Dictionary<string, decimal> GetBalances()
     {
         var users = GetUsers();
-        return users.ToDictionary(u => u, u => GetBalance(u));
+        return users.ToDictionary(u => u, GetBalance);
     }
 
     /// <summary>Returns a string that represents the current object.</summary>
@@ -115,14 +126,15 @@ public class BlockChain
         foreach (var block in Chain)
         {
             sb.Append(block);
+            sb.AppendLine();
         }
+        sb.AppendLine();
         var balances = GetBalances();
         sb.AppendLine("Current balances: ");
         foreach (var b in balances)
         {
             sb.AppendLine($"{b.Key}:\tBTC {b.Value:F}");    
         }
-
         return sb.ToString();
     }
 }
